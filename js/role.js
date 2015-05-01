@@ -16,11 +16,13 @@ function Point() {
   this.x = 0;
   this.y = 0;
   this.score = 0;
+  this.color = '#FFF';
 }
 
-Point.prototype.set = function (posX, posY) {
+Point.prototype.set = function (posX, posY, color) {
   this.x = posX;
   this.y = posY;
+  this.color = color;
 }
 
 Point.prototype.auxMove = function (direct) {
@@ -33,20 +35,22 @@ Point.prototype.auxMove = function (direct) {
   }
   if (validNext(posX, posY)) {
     clearGrid(this.x, this.y);
+    // update position
     this.x = posX;
     this.y = posY;
-    // console.log(this.x, this.y)
+    // console.log(this.x, this.y, this.color)
     var ret = judgeNext(this.x, this.y);
     if (ret > 0) {
-      console.log(this.score, this.score + ret);
+      // console.log(this.score, this.score + ret);
       this.score += ret;
+      getById(getGridId(this.x, this.y)).innerText = ""; // eat treasure
       getById('score').innerHTML = this.score;
     }
-    else {
+    else if (ret === -1) {
       getById('message').innerHTML = "Game Over";
-      
+
     }
-    setGrid(this.x, this.y, 'hero', HERO_COLOR);
+    setGrid(this.x, this.y, 'hero', this.color);
   }
 }
 

@@ -4,8 +4,8 @@ window.ie = (document.all) ? true : false;
 
 var DEFAULT_COLOR = '#FFF',
     HERO_COLOR = '#337ab7',
-    BLOCK_COLOR = '#D43F3A', //red
-    ROBOT_COLOR = '#f0ad4e',
+    ROBOT_COLOR = '#D43F3A', //red
+    BLOCK_COLOR = '#f0ad4e',
     TREASURE_COLOR = '#4CAE4C'; // green
 
 var BLOCK_NUM = 3,
@@ -14,12 +14,13 @@ var BLOCK_NUM = 3,
 
 
 function Game() {
-  this.blocksPositions = [];
-  this.robotsPositions = [];
-  this.treasuresPositions = [];
+  this.blocks = [];
+  this.robots = [];
+  this.treasures = [];
   this.hero = new Point();
+  // this.hero.set(0, 0, HERO_COLOR);
   this.round = 0;
-  this.treasureCount = 0;
+  // this.treasureCount = 0;
 }
 
 
@@ -53,7 +54,7 @@ Game.prototype.initBlock = function (posX, posY) {
 }
 
 Game.prototype.initHero = function (posX, posY) {
-  this.hero.set(posX, posY);
+  this.hero.set(posX, posY, HERO_COLOR);
   setGrid(posX, posY, 'hero', HERO_COLOR);
 }
 
@@ -71,31 +72,30 @@ Game.prototype.generateRole = function(roleName, posX, posY, value) {
   var roleColor, roleSet;
   if (roleName === 'treasure') {
     console.log('add treasure')
-    roleSet = this.treasuresPositions;
+    roleSet = this.treasures;
     roleColor = TREASURE_COLOR;
     currGrid.value = value ? value : 0;
   }
   else if (roleName === 'block') {
     console.log('add block')
-    roleSet = this.blocksPositions;
+    roleSet = this.blocks;
     roleColor = BLOCK_COLOR;
   }
   else if (roleName === 'robot') {
     console.log('add robot')
-    roleSet = this.robotsPositions;
+    roleSet = this.robots;
     roleColor = ROBOT_COLOR;
   }
   currGrid.setAttribute('name', roleName);
   currGrid.style.backgroundColor = roleColor;
   var point = new Point();
-  point.x = posX; point.y = posY;
+  point.set(posX, posY, roleColor);
   roleSet.push(point);
 }
 
 
 Game.prototype.initMap = function () {
   var self = this;
-  console.log(self)
   var map = getById('map');
   var mapWidth = 10,
     mapHeight = 10;
@@ -131,17 +131,12 @@ Game.prototype.initMap = function () {
             valueInput.style.display = 'none';
           }
           var value = valueInput.value;
-          if (!checkInput(value)) {
-            // alert input failed
-            valueInput.value = ""; // clear text
-          }
-          else {
+          if (checkInput(value)) {
             // treasure
-            console.log(value)
-            if (/[1-9]/.test(value)) {
+            // console.log(value)
+            if (/^[1-9]$/.test(value)) {
               self.initTreasure(i, j, value);
-              grid.innerHTML = value + grid.innerHTML;
-
+              grid.innerText = value;
             }
             else if (value === 'o') {
               self.initBlock(i, j);
@@ -153,13 +148,36 @@ Game.prototype.initMap = function () {
               self.initRobot(i, j);
             }
           }
-          
+          valueInput.value = "";
         });
         
         row.appendChild(grid);
       } (i, j));
     }
     map.appendChild(row);
+  }
+}
+
+Game.prototype.moveRobots = function () {
+  var hero = this.hero;
+  for (var i = 0; i < this.robots.length; i++) {
+    (function (i, robot) {
+      var distance = calcDistance(robot, hero);
+      console.log(i, distance.x, distance.y);
+      if (distance.x > 0) {
+        robot.right();
+      }
+      else if (distance.x < 0) {
+        robot.left();
+      }
+      if (distance.y > 0) {
+        robot.down();
+      }
+      else if (distance.y < 0) {
+        robot.up();
+      }
+
+    }(i, this.robots[i]));
   }
 }
 

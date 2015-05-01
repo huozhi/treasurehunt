@@ -23,5 +23,6 @@ function keyPressListener(e) {
   }
   var keyValue = String.fromCharCode(key);
   game.moveHero(keyValue);
+  game.moveRobots();
 }
 

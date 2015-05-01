@@ -43,16 +43,21 @@ function checkInput(value) {
   return true;
 }
 
-function getContent(id) {
-  var element = getById(id);
+function getContent(element) {
   return element.innerHTML.replace(/<[^>]*>/g, "");
 }
 
-function setContent(id, text) {
-  var element = getById(id);
+function setContent(element, text) {
   element.innerHTML = text;
 }
 
+function removeContent(element) {
+  for (var i = 0; i < element.childNodes.length; i++) {
+    if (element.childNodes[i].nodeType === 3) {
+      element.removeChild(element.childNodes[i]);
+    }
+  }
+}
 
 function judgeNext(posX, posY) {
   var id = getGridId(posX, posY);
@@ -68,7 +73,7 @@ function judgeNext(posX, posY) {
     // grid.value = 
     return parseInt(grid.value);
   }
-
+  return 0;
 }
 
 function validNext(posX, posY) {
@@ -92,11 +97,10 @@ function clearGrid(posX, posY) {
   var id = getGridId(posX, posY);
   var grid = getById(id);
   // console.log(posX, posY, id, grid);
-  
   grid.style.backgroundColor = DEFAULT_COLOR;
   grid.setAttribute('name', 'empty');
   grid.removeAttribute('value');
-  grid.children[0].value = "";
+  grid.value = "";
 }
 
 function setGrid(posX, posY, name, color) {
@@ -126,3 +130,23 @@ function onEvent(element, eventType, callback) {
   element.addEventListener(eventType, callback, false);  
 }
 
+function calcDistance(start, target) {
+  var xDelta = target.x - start.x;
+  if (xDelta > 0) {
+    xDelta = 1;
+  }
+  else if (xDelta < 0) {
+    xDelta = -1;
+  }
+
+  var yDelta = target.y - start.y;
+  if (yDelta > 0) {
+    yDelta = 1;
+  }
+  else if (yDelta < 0) {
+    yDelta = -1;
+  }
+  var dis = new Point();
+  dis.set(yDelta, xDelta);  
+  return dis;
+}
