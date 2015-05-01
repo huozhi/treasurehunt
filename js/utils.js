@@ -43,9 +43,14 @@ function checkInput(value) {
   return true;
 }
 
-function getText(id){
+function getContent(id) {
   var element = getById(id);
   return element.innerHTML.replace(/<[^>]*>/g, "");
+}
+
+function setContent(id, text) {
+  var element = getById(id);
+  element.innerHTML = text;
 }
 
 
@@ -55,9 +60,13 @@ function judgeNext(posX, posY) {
   var gridType = grid.getAttribute('name');
   if (gridType === 'robot') {
     postEvent(gameInfo, 'over');
+    return -1;
   }
   else if (gridType === 'treasure') {
     postEvent(gameInfo, 'treasure');
+    console.log(parseInt(grid.value));
+    // grid.value = 
+    return parseInt(grid.value);
   }
 
 }
@@ -70,7 +79,7 @@ function validNext(posX, posY) {
   if (grid.getAttribute('name') === 'block')
     return false;
   var classes = grid.getAttribute('class').split(' ');
-  console.log(classes);
+  // console.log(classes);
   if (classes.indexOf('block') >= 0) return false;
   return true;
 }
@@ -97,7 +106,8 @@ function setGrid(posX, posY, name, color) {
 
   grid.style.backgroundColor = color;
   grid.setAttribute('name', name);
-  grid.setAttribute('value', name);
+  if (!isNaN(parseInt(name)))
+    grid.setAttribute('value', name);
 }
 
 

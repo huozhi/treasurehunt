@@ -2,7 +2,7 @@
 
 window.ie = (document.all) ? true : false;
 
-var DEFAULT_COLOR = '#e6e6e6',
+var DEFAULT_COLOR = '#FFF',
     HERO_COLOR = '#337ab7',
     BLOCK_COLOR = '#D43F3A', //red
     ROBOT_COLOR = '#f0ad4e',
@@ -11,10 +11,6 @@ var DEFAULT_COLOR = '#e6e6e6',
 var BLOCK_NUM = 3,
     ROBOTS_NUM = 2,
     TREASURES_NUM = 2;
-
-
-var currGrid = null;
-var nextGrid = null;
 
 
 function Game() {
@@ -28,11 +24,15 @@ function Game() {
 
 
 Game.prototype.init = function () {
+  var self = this;
   onEvent(gameInfo, 'over', function () {
     console.log('game over');
   });
   onEvent(gameInfo, 'treasure', function () {
     console.log('eat treasure');
+    var scorePanel = getById('score');
+    
+    // scorePanel.innerHTML = self.hero.score || scorePanel.innerHTML;
   });
   onEvent(gameInfo, 'win', function () {
     console.log('win');
@@ -40,7 +40,6 @@ Game.prototype.init = function () {
 
   this.initMap();
 }
-
 
 
 
@@ -164,17 +163,18 @@ Game.prototype.initMap = function () {
   }
 }
 
-Game.prototype.moveHero = function (keyValue) {
-    
-    switch (keyValue) {
-      case 'A':
-        this.hero.left(); break;
-      case 'W':
-        this.hero.up(); break;
-      case 'S':
-        this.hero.down(); break;
-      case 'D':
-        this.hero.right(); break;
-      default: break;
-    }
+Game.prototype.moveHero = function (keyValue) {  
+  switch (keyValue) {
+    case 'A':
+      this.hero.left(); break;
+    case 'W':
+      this.hero.up(); break;
+    case 'S':
+      this.hero.down(); break;
+    case 'D':
+      this.hero.right(); break;
+    default: break;
+  }
+  this.round++;
+  getById('round').innerHTML = this.round;
 }
