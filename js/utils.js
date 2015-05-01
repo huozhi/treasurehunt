@@ -59,7 +59,7 @@ function removeContent(element) {
   }
 }
 
-function judgeNext(posX, posY) {
+function judgeHeroNext(posX, posY) {
   var id = getGridId(posX, posY);
   var grid = getById(id);
   var gridType = grid.getAttribute('name');
@@ -69,8 +69,23 @@ function judgeNext(posX, posY) {
   }
   else if (gridType === 'treasure') {
     postEvent(gameInfo, 'treasure');
-    console.log(parseInt(grid.value));
-    // grid.value = 
+    // console.log(parseInt(grid.value));
+    return parseInt(grid.value);
+  }
+  return 0;
+}
+
+function judgeRobotNext(posX, posY) {
+  var id = getGridId(posX, posY);
+  var grid = getById(id);
+  var gridType = grid.getAttribute('name');
+  // console.log('rb next', posX, posY);
+  if (gridType === 'hero') {
+    console.log('over');
+    postEvent(gameInfo, 'over');
+    return -1;
+  }
+  else if (gridType === 'treasure') {
     return parseInt(grid.value);
   }
   return 0;
@@ -103,7 +118,7 @@ function clearGrid(posX, posY) {
   grid.value = "";
 }
 
-function setGrid(posX, posY, name, color) {
+function setGrid(posX, posY, color, name) {
   var id = getGridId(posX, posY);
   var grid = getById(id);
   // console.log(posX, posY, id, grid);

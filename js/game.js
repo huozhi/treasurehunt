@@ -1,6 +1,8 @@
 'use strict';
 
 window.ie = (document.all) ? true : false;
+var messagePanel = getById('message');
+
 
 var DEFAULT_COLOR = '#FFF',
     HERO_COLOR = '#337ab7',
@@ -20,32 +22,39 @@ function Game() {
   this.hero = new Point();
   // this.hero.set(0, 0, HERO_COLOR);
   this.round = 0;
-  // this.treasureCount = 0;
+  this.treasureCount = 0;
 }
 
 
 Game.prototype.init = function () {
+  this.initMap();
   var self = this;
   onEvent(gameInfo, 'over', function () {
     console.log('game over');
+    // alert('game over');
+    messagePanel.innerText = "Game Over !!";
+    // restart()
   });
   onEvent(gameInfo, 'treasure', function () {
     console.log('eat treasure');
     var scorePanel = getById('score');
-    
+    messagePanel.innerText = "Get Treasure !!";
+    --self.treasureCount;
     // scorePanel.innerHTML = self.hero.score || scorePanel.innerHTML;
   });
   onEvent(gameInfo, 'win', function () {
+    messagePanel.innerText = "Win !";
     console.log('win');
   });
 
-  this.initMap();
 }
 
 
 
-Game.prototype.update = function () {
-
+Game.prototype.checkStatus = function () {
+  if (this.treasureCount === 0) {
+    postEvent(gameInfo, 'win');
+  }
 }
 
 
@@ -54,8 +63,8 @@ Game.prototype.initBlock = function (posX, posY) {
 }
 
 Game.prototype.initHero = function (posX, posY) {
-  this.hero.set(posX, posY, HERO_COLOR);
-  setGrid(posX, posY, 'hero', HERO_COLOR);
+  this.hero.set(posX, posY, HERO_COLOR, 'hero');
+  setGrid(posX, posY, HERO_COLOR, 'hero');
 }
 
 
@@ -65,6 +74,7 @@ Game.prototype.initRobot = function (posX, posY) {
 
 Game.prototype.initTreasure = function (posX, posY, value) {
   this.generateRole('treasure', posX, posY, value);
+  this.treasureCount++;
 }
 
 Game.prototype.generateRole = function(roleName, posX, posY, value) {
@@ -89,7 +99,7 @@ Game.prototype.generateRole = function(roleName, posX, posY, value) {
   currGrid.setAttribute('name', roleName);
   currGrid.style.backgroundColor = roleColor;
   var point = new Point();
-  point.set(posX, posY, roleColor);
+  point.set(posX, posY, roleColor, roleName);
   roleSet.push(point);
 }
 
@@ -163,20 +173,24 @@ Game.prototype.moveRobots = function () {
   for (var i = 0; i < this.robots.length; i++) {
     (function (i, robot) {
       var distance = calcDistance(robot, hero);
-      console.log(i, distance.x, distance.y);
-      if (distance.x > 0) {
+      // console.log(i, distance.x, distance.y);
+      var nextX = robot.x + distance.x,
+          nextY = robot.y + distance.y;
+      
+      judgeRobotNext(nextX, nextY);
+      if (distance.x > 0 && validNext(nextX, robot.y)) {
         robot.right();
       }
-      else if (distance.x < 0) {
+      else if (distance.x < 0 && validNext(nextX, robot.y)) {
         robot.left();
       }
-      if (distance.y > 0) {
+      if (distance.y > 0 && validNext(robot.x, nextY)) {
         robot.down();
       }
-      else if (distance.y < 0) {
+      else if (distance.y < 0 && validNext(robot.x, nextY)) {
         robot.up();
       }
-
+      judgeRobotNext(robot.x, robot.y);
     }(i, this.robots[i]));
   }
 }

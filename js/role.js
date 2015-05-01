@@ -1,6 +1,5 @@
 'use strict';
 
-
 var DEFAULT_COLOR = '#e6e6e6',
     HERO_COLOR = '#337ab7';
     // BLOCK_COLOR = '#D43F3A',
@@ -17,12 +16,14 @@ function Point() {
   this.y = 0;
   this.score = 0;
   this.color = '#FFF';
+  this.name = "";
 }
 
-Point.prototype.set = function (posX, posY, color) {
+Point.prototype.set = function (posX, posY, color, name) {
   this.x = posX;
   this.y = posY;
   this.color = color;
+  this.name = name;
 }
 
 Point.prototype.auxMove = function (direct) {
@@ -39,7 +40,7 @@ Point.prototype.auxMove = function (direct) {
     this.x = posX;
     this.y = posY;
     // console.log(this.x, this.y, this.color)
-    var ret = judgeNext(this.x, this.y);
+    var ret = judgeHeroNext(this.x, this.y);
     if (ret > 0) {
       // console.log(this.score, this.score + ret);
       this.score += ret;
@@ -50,7 +51,7 @@ Point.prototype.auxMove = function (direct) {
       getById('message').innerHTML = "Game Over";
 
     }
-    setGrid(this.x, this.y, 'hero', this.color);
+    setGrid(this.x, this.y, this.color, this.name);
   }
 }
 
