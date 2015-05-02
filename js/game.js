@@ -19,7 +19,7 @@ function Game() {
   this.blocks = [];
   this.robots = [];
   this.treasures = [];
-  this.hero = new Point();
+  this.hero = null;//new Point();
   // this.hero.set(0, 0, HERO_COLOR);
   this.round = 0;
   this.treasureCount = 0;
@@ -64,8 +64,11 @@ Game.prototype.initBlock = function (posX, posY) {
 }
 
 Game.prototype.initHero = function (posX, posY) {
-  this.hero.set(posX, posY, HERO_COLOR, 'hero');
-  setGrid(posX, posY, HERO_COLOR, 'hero');
+  if (this.hero == null) {
+    this.hero = new Point();
+    this.hero.set(posX, posY, HERO_COLOR, 'hero');
+    setGrid(posX, posY, HERO_COLOR, 'hero');
+  }
 }
 
 

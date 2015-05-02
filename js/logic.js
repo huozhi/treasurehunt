@@ -30,4 +30,4 @@ function keyPressListener(e) {
   game.checkStatus();
 }
 
-// resetGame();
+resetGame();
