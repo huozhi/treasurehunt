@@ -1,7 +1,8 @@
 'use strict';
 
 window.ie = (document.all) ? true : false;
-var messagePanel = getById('message');
+window.messagePanel = getById('message');
+window.roundPanel = getById('round');
 
 
 var DEFAULT_COLOR = '#FFF',
@@ -26,9 +27,15 @@ function Game() {
 }
 
 
+Game.prototype.resetData = function () {
+  messagePanel.innerText = "0";
+  roundPanel.innerText = "0"
+}
+
 Game.prototype.init = function () {
   this.clearMap();
   this.initMap();
+
   var self = this;
   onEvent(gameInfo, 'over', function () {
     console.log('game over');

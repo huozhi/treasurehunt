@@ -17,30 +17,41 @@
   <div id="gameInfo" class="state-bar col-lg-4 col-md-4 col-sm-4">
     <div class="container-fluid">
       <h2><small>Treasure Hunt !</small></h2>
-        <ul class="nav nav-pills" role="tablist">
-          <div class="form-group">
-            <li role="presentation" class="active">
-              <p class="game-info btn btn-default">Round <span id="round" class="badge">0</span></p>
-            </li>
-          </div>
-          <div class="form-group">
-            <li role="presentation" class="active">
-              <p class="game-info btn btn-primary">Score <span id="score" class="badge">0</span></p>
-            </li>
-          </div>
-          <div class="form-group">
-            <li role="presentation" class="active">
-              <p class="game-info btn btn-warning">Messages <span id="message" class="badge"></span></p>
-            </li>
-          </div>
-          <div class="btn-group btn-group-justified" role="group">
-            <button class="btn btn-danger" onclick="resetGame()" style="width:50%;">Reset</button>
-            <button class="btn btn-success" onclick="startGame()" style="width:50%;">Start</button>
-          </div>
-        </ul>
-      </div>
+      <ul class="nav nav-pills" role="tablist">
+        <div class="form-group">
+          <li role="presentation" class="active">
+            <p class="game-info btn btn-default">Round <span id="round" class="badge">0</span></p>
+          </li>
+        </div>
+        <div class="form-group">
+          <li role="presentation" class="active">
+            <p class="game-info btn btn-primary">Score <span id="score" class="badge">0</span></p>
+          </li>
+        </div>
+        <div class="form-group">
+          <li role="presentation" class="active">
+            <p class="game-info btn btn-warning">Messages <span id="message" class="badge"></span></p>
+          </li>
+        </div>
+        <div class="btn-group btn-group-justified" role="group">
+          <a class="btn btn-danger" onclick="resetGame()" role="group">Reset</a>
+          <a class="btn btn-success" onclick="startGame()" role="group">Start</a>
+        </div>
+      </ul>
+      <h2><small>Instructions</small></h2>
+      <p>Click the grid and type following characters to set the role.</p>
+      <p>Then click start button to control your hero eating treasure.</p>
+      <p>The status will show on the message and round panel.</p>
+      <p>If you wanna restart the game, click Reset button.</p>
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-primary">h for Hero</li>
+        <li class="list-group-item list-group-item-info">1 - 9 for Treasure</li>
+        <li class="list-group-item list-group-item-warning">o for Obstacle</li>
+        <li class="list-group-item list-group-item-danger">k for Killer</li>
+      </ul>
     </div>
   </div>
+
 
   <!-- playground -->
   <div class="wrap col-lg-8 col-md-8 col-sm-8">
