@@ -61,6 +61,7 @@ function removeContent(element) {
 
 function judgeHeroNext(posX, posY) {
   var id = getGridId(posX, posY);
+  // console.log('judgeHeroNext', posX, posY);
   var grid = getById(id);
   var gridType = grid.getAttribute('name');
   if (gridType === 'robot') {
@@ -78,8 +79,9 @@ function judgeHeroNext(posX, posY) {
 function judgeRobotNext(posX, posY) {
   var id = getGridId(posX, posY);
   var grid = getById(id);
+  // console.log('judgeRobotNext', posX, posY);
   var gridType = grid.getAttribute('name');
-  // console.log('rb next', posX, posY);
+  
   if (gridType === 'hero') {
     console.log('over');
     postEvent(gameInfo, 'over');
@@ -88,7 +90,10 @@ function judgeRobotNext(posX, posY) {
   else if (gridType === 'treasure') {
     return parseInt(grid.value);
   }
-  return 0;
+  else if (gridType === 'robot') {
+    return 0;
+  }
+  return 1;
 }
 
 function validNext(posX, posY) {
@@ -162,6 +167,6 @@ function calcDistance(start, target) {
     yDelta = -1;
   }
   var dis = new Point();
-  dis.set(yDelta, xDelta);  
+  dis.set(xDelta, yDelta);  
   return dis;
 }

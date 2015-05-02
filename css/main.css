@@ -25,7 +25,7 @@ html, body {
 .row {
   margin: 0px 0px 0px 0px;
   min-width: 580px;
-
+  display: block;
 }
 .grid {
   display: inline-block;

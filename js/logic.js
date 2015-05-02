@@ -2,15 +2,18 @@
 
 window.ie = (document.all) ? true : false;
 
-var game = new Game();
-game.init();
+window.game = null;
 
 function startGame() {
   document.addEventListener('keydown', keyPressListener)
+  
 }
 
 function resetGame() {
   document.removeEventListener('keydown', keyPressListener);
+  // game.clearMap();
+  game = new Game();
+  game.init();
 }
 
 function keyPressListener(e) {
@@ -27,3 +30,4 @@ function keyPressListener(e) {
   game.checkStatus();
 }
 
+// resetGame();

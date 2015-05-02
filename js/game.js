@@ -27,6 +27,7 @@ function Game() {
 
 
 Game.prototype.init = function () {
+  this.clearMap();
   this.initMap();
   var self = this;
   onEvent(gameInfo, 'over', function () {
@@ -103,6 +104,10 @@ Game.prototype.generateRole = function(roleName, posX, posY, value) {
   roleSet.push(point);
 }
 
+Game.prototype.clearMap = function () {
+  getById('map').innerHTML = "";
+  
+}
 
 Game.prototype.initMap = function () {
   var self = this;
@@ -162,7 +167,8 @@ Game.prototype.initMap = function () {
         });
         
         row.appendChild(grid);
-      } (i, j));
+      }(i, j));
+
     }
     map.appendChild(row);
   }
@@ -176,37 +182,51 @@ Game.prototype.moveRobots = function () {
       // console.log(i, distance.x, distance.y);
       var nextX = robot.x + distance.x,
           nextY = robot.y + distance.y;
-      
-      judgeRobotNext(nextX, nextY);
+      // console.log('x', robot.x, distance.x, nextX);
+      // console.log('y', robot.y, distance.y, nextY);
+
+      var ret = judgeRobotNext(nextX, robot.y);
+      if (ret === 0) {
+        console.log(i, nextX, robot.y);
+        return;
+      }
       if (distance.x > 0 && validNext(nextX, robot.y)) {
-        robot.right();
-      }
-      else if (distance.x < 0 && validNext(nextX, robot.y)) {
-        robot.left();
-      }
-      if (distance.y > 0 && validNext(robot.x, nextY)) {
         robot.down();
       }
-      else if (distance.y < 0 && validNext(robot.x, nextY)) {
+      else if (distance.x < 0 && validNext(nextX, robot.y)) {
         robot.up();
       }
-      judgeRobotNext(robot.x, robot.y);
+      ret = judgeRobotNext(robot.x, nextY);
+      if (ret === 0) {
+        console.log(i, robot.x, nextY);       
+        return;
+      }
+      if (distance.y > 0 && validNext(robot.x, nextY)) {
+        robot.right();
+      }
+      else if (distance.y < 0 && validNext(robot.x, nextY)) {
+        robot.left();
+      }
+      console.log(i, robot.x, robot.y);
     }(i, this.robots[i]));
   }
 }
 
 Game.prototype.moveHero = function (keyValue) {  
+  var ret;
   switch (keyValue) {
     case 'A':
-      this.hero.left(); break;
+      ret = this.hero.left(); break;
     case 'W':
-      this.hero.up(); break;
+      ret = this.hero.up(); break;
     case 'S':
-      this.hero.down(); break;
+      ret = this.hero.down(); break;
     case 'D':
-      this.hero.right(); break;
-    default: break;
+      ret = this.hero.right(); break;
+    default:
+      ret = -1;
+      break;
   }
-  this.round++;
+  if (ret !== -1) this.round++;
   getById('round').innerHTML = this.round;
 }

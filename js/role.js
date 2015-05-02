@@ -53,21 +53,24 @@ Point.prototype.auxMove = function (direct) {
     }
     setGrid(this.x, this.y, this.color, this.name);
   }
+  else
+    return -1;
+  return 0;
 }
 
 Point.prototype.left = function () {
-  this.auxMove(LEFT);
+  return this.auxMove(LEFT);
 }
 
 Point.prototype.right = function () {
-  this.auxMove(RIGHT);
+  return this.auxMove(RIGHT);
 }
 
 Point.prototype.up = function () {
-  this.auxMove(UP);
+  return this.auxMove(UP);
 }
 
 Point.prototype.down = function () {
-  this.auxMove(DOWN);
+  return this.auxMove(DOWN);
 }
 
